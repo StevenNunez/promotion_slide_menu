@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^spec/})
   s.require_paths = ['lib']
 
-  s.add_dependency "bubble-wrap"
   s.add_dependency "motion-cocoapods"
   s.add_dependency "ProMotion", '~> 1.0'
   s.add_development_dependency "motion-stump"

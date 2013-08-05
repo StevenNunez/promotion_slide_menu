@@ -13,11 +13,11 @@ module ProMotionSlideMenu
     #
 
     def self.new(menu, content, options={})
-      screen = self.revealControllerWithFrontViewController(nil, leftViewController: nil, options: nil)
-      screen.on_create(options) if screen.respond_to?(:on_create)
-      screen.menu_controller = menu unless menu.nil?
-      screen.content_controller = content unless content.nil?
-      screen
+      self.revealControllerWithFrontViewController(nil, leftViewController: nil, options: nil).tap do |screen|
+        screen.on_create(options) if screen.respond_to?(:on_create)
+        screen.menu_controller = menu if menu
+        screen.content_controller = content if content
+      end
     end
 
     def show_menu
@@ -29,8 +29,7 @@ module ProMotionSlideMenu
     end
 
     def menu_controller=(c)
-      controller = prepare_controller_for_pm(c)
-      controller = controller.navigationController || controller
+      controller = prepare_controller(c)
       self.setLeftViewController controller, focusAfterChange: true, completion: default_completion_block
     end
 
@@ -39,8 +38,7 @@ module ProMotionSlideMenu
     end
 
     def content_controller=(c)
-      controller = prepare_controller_for_pm(c)
-      controller = controller.navigationController || controller
+      controller = prepare_controller(c)
       self.setFrontViewController controller, focusAfterChange: true, completion: default_completion_block
     end
 
@@ -48,13 +46,13 @@ module ProMotionSlideMenu
       self.frontViewController
     end
 
-
     protected
 
-    def prepare_controller_for_pm(controller)
-      controller = set_up_screen_for_open(controller, {})
-      ensure_wrapper_controller_in_place(controller, {})
-      controller
+    def prepare_controller(controller)
+      controller = set_up_screen_for_open(controller, {}).tap do |c|
+        ensure_wrapper_controller_in_place(c, {})
+      end
+      controller.navigationController || controller
     end
 
     def default_completion_block

@@ -6,15 +6,19 @@ module ProMotionSlideMenu
     end
 
     def has_slide_menu?
-      !slide_menu.nil?
+      !!slide_menu
     end
 
     def open_slide_menu(menu, content, options={})
-      self.slide_menu = SlideMenuScreen.new(menu, content, options)
-      open_root_screen slide_menu
-      slide_menu
+      SlideMenuScreen.new(menu, content, options).tap do |slide_menu|
+        self.slide_menu = slide_menu
+        open_root_screen slide_menu
+      end
     end
 
+    def show_menu
+      UIApplication.sharedApplication.delegate.slide_menu
+    end
   end
 end
 

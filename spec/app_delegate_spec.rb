@@ -1,7 +1,7 @@
 describe ProMotionSlideMenu::AppDelegate do
 
   before do
-    @delegate = App.delegate
+    @delegate = UIApplication.sharedApplication.delegate
   end
 
   it "should have a 'slide_menu' attribute" do
@@ -11,6 +11,11 @@ describe ProMotionSlideMenu::AppDelegate do
   it "should not have a slide menu by default" do
     @delegate.has_slide_menu?.should == false
   end
+
+  it "returns it has a slide menu" do
+    @delegate.open_slide_menu(nil, nil).should.be.instance_of ProMotionSlideMenu::SlideMenuScreen
+    @delegate.has_slide_menu?.should == true
+  end 
 
   it "should respond to 'open_slide_menu'" do
     @delegate.respond_to?(:open_slide_menu).should == true
